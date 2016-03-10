@@ -1,5 +1,15 @@
-#audio-button{
-	margin: 0 auto;
+#button_container{
 	text-align: center;
-	max-width: 50%;
+}
+
+#message_content{
+	margin: 4em auto;
+	padding: 10px;
+	text-align: justify;
+	max-width: 80%;
+}
+
+.button{
+	margin: 10px auto;
+	min-width: 60%;
 }
