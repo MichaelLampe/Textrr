@@ -11,3 +11,14 @@ angular.module('textrr', ['ionic'])
     }
   });
 })
+
+
+// make sure your the code gets executed only after `deviceready`.
+document.addEventListener('deviceready', function () {
+    TTS
+        .speak({
+            text: 'If the API is invoked when its still speaking, the previous speaking will be canceled immediately',
+            locale: 'en-US',
+            rate: 1.25
+        });
+}, false);
