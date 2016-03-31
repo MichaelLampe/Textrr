@@ -12,6 +12,17 @@ app.run(function($ionicPlatform) {
   });
 })
 
+app.config(function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('remappingkeys', {
+    url: '/help',
+    views: {
+      help: {
+        templateUrl: 'help.html'
+      }
+    }
+  })
+})
+
 var default_words = [
   "want","ipad","help","love","colors","yes","no","bath","school","read","hug","brush teeth",
   "ball","music","potty","up","snack","sing","alphabet","walk","milk","mama","daddy","go","car","numbers","more","blanket","stop"
