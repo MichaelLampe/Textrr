@@ -12,12 +12,13 @@ angular.module('textrr', ['ionic'])
   });
 })
 
+var words = ["want","ipad","help","love","colors","yes","no","bath","school","read","hug","brush teeth","ball","music","potty","up",
+"snack","sing","alphabet","walk","milk","mama","daddy","go","car","numbers","more","blanket","stop"];
 
-// make sure your the code gets executed only after `deviceready`.
-document.addEventListener('deviceready', function () {
+document.getElementById("playbutton").addEventListener('click', function () {
     TTS
         .speak({
-            text: 'If the API is invoked when its still speaking, the previous speaking will be canceled immediately',
+            text: words[Math.floor(Math.random() * 29)],
             locale: 'en-US',
             rate: 1.25
         });
