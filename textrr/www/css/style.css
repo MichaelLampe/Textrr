@@ -47,17 +47,6 @@
 	border-radius: 25px;
 }
 
-.highlight_key{
-	height: 9vh;
-	width: 14vw;
-	background-color: #00FF00!important;
-	border: 3px solid #00FF00;
-	margin: 7px auto;
-	margin-left: 1px;
-	text-align: center;
-	border-radius: 25px;
-}
-
 .button_text {
 	transform: rotate(90deg);
 	transform-origin: left top 0;

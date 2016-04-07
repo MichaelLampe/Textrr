@@ -9,39 +9,30 @@ app.run(function($ionicPlatform) {
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+
   });
 })
 
-app.config(function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('remappingkeys', {
-    url: '/help',
-    views: {
-      help: {
-        templateUrl: 'help.html'
-      }
-    }
-  })
-})
 
 highlightWord = function(){
-    var menu = document.getElementById('select_menu');
-    var selected = menu.selectedIndex;
-    var button = document.getElementById('button_' + selected.toString());
-    button.setAttribute('class','highlight_key');
-    alert('here');
+  //alert($scope.selectedItem);
+  var menu = document.getElementById('select_menu');
+  var selected = menu.selectedIndex;
+  var button = document.getElementById('button_' + selected.toString());
+  button.setAttribute('class','highlight_key');
+  alert('here');
 }
 
+var lastindex = -1;
+var words;
 var default_words = [
   "want","ipad","help","love","colors","yes","no","bath","school","read","hug","brush teeth",
   "ball","music","potty","up","snack","sing","alphabet","walk","milk","mama","daddy","go","car","numbers","more","blanket","stop"
 ];
 
-var words;
-
-
-
 
 document.addEventListener("deviceready", function(){
+
   if(window.localStorage['words'] === undefined){
     window.localStorage['words'] = default_words.toString();
   }
@@ -55,72 +46,51 @@ document.addEventListener("deviceready", function(){
 
 
   for(var i = 0; i < 8; i++){
-    var div = document.createElement('div');
-
-    var text = document.createElement('p');
-    text.setAttribute('class','button_text');
-    text.innerHTML=words[i];
-
     var button = document.createElement('button');
-
     button.setAttribute('class', 'key');
     button.setAttribute('id', 'button_' + i.toString());
-    div.appendChild(button);
-    //div.appendChild(text);
-    ldiv.appendChild(div);
+    button.setAttribute('value', words[i]);
 
+    button.addEventListener('click', function(){
+      alert(this.getAttribute('value'));
+    })
 
-
-    var div1 = document.createElement('div');
-
-    var text1 = document.createElement('p');
-    text1.setAttribute('class','button_text');
-    text1.innerHTML=words[i+8];
+    ldiv.appendChild(button);
 
     var button1 = document.createElement('button');
     button1.setAttribute('class','key');
     button1.setAttribute('id', 'button_' + (i + 8).toString());
-    div1.appendChild(button1);
-    //div1.appendChild(text1);
-    mldiv.appendChild(div1);
+    button1.setAttribute('value', words[i + 8]);
 
+    button1.addEventListener('click', function(){
+      alert(this.getAttribute('value'));
+    })
 
-
-
-    var div2 = document.createElement('div');
-
-    var text2 = document.createElement('p');
-    text2.setAttribute('class','button_text');
-    text2.innerHTML=words[i+16];
+    mldiv.appendChild(button1);
 
     var button2 = document.createElement('button');
     button2.setAttribute('class','key');
     button2.setAttribute('id', 'button_' + (i + 16).toString());
-    div2.appendChild(button2);
-  //  div2.appendChild(text2);
-    mrdiv.appendChild(div2);
+    button2.setAttribute('value', words[i + 16]);
 
+    button2.addEventListener('click', function(){
+      alert(this.getAttribute('value'));
+    })
 
+    mrdiv.appendChild(button2);
 
-
-    var div3 = document.createElement('div');
-
-    var text3 = document.createElement('p');
-    text3.setAttribute('class','button_text');
-    text3.innerHTML=words[i+24];
-
-    var button3 = document.createElement('button');
-    button3.setAttribute('id', 'button_' + (i + 24).toString());
-
-    if(i === 0){
-      button3.setAttribute('class','dead_key');
-    }
-    else{
+    if(i !== 7){
+      var button3 = document.createElement('button');
       button3.setAttribute('class','key');
+      button3.setAttribute('id', 'button_' + (i + 24).toString());
+      button3.setAttribute('value', words[i + 24]);
+
+      button3.addEventListener('click', function(){
+        alert(this.getAttribute('value'));
+      })
+
+      rdiv.appendChild(button3);
     }
-    div3.appendChild(button3);
-    //div3.appendChild(text3);
-    rdiv.appendChild(div3);
   }
 
 
@@ -130,14 +100,36 @@ document.addEventListener("deviceready", function(){
     option.innerHTML = words[i];
     dropdown.appendChild(option);
   }
+
+  dropdown.addEventListener('change', function() {
+
+    if (dropdown.selectedIndex == -1)
+      return null;
+
+    var index = dropdown.selectedIndex - 1;
+    if(lastindex !== -1){
+      var lastbutton = document.getElementById("button_" + lastindex.toString());
+      lastbutton.style.background = "#d9d9d9";
+    }
+    var button = document.getElementById("button_" + index.toString());
+    button.style.background='#32CD32';
+    lastindex = index;
+
+    TTS
+    .speak({
+      text: words[index],
+      locale: 'en-US',
+      rate: 1.25
+    });
+  })
 });
 
 
 document.getElementById("playbutton").addEventListener('click', function () {
-    TTS
-        .speak({
-            text: words[Math.floor(Math.random() * 29)],
-            locale: 'en-US',
-            rate: 1.25
-        });
+  TTS
+  .speak({
+    text: words[Math.floor(Math.random() * 29)],
+    locale: 'en-US',
+    rate: 1.25
+  });
 }, false);
