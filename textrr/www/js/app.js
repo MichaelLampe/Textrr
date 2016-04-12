@@ -1,157 +1,163 @@
-var app = angular.module('textrr', ['ionic'])
+// Declare application
+var app = angular.module('textrr', ['ionic']);
 
+// Basic constants
+// TODO: Define these colors and properties in css classes that we add and remove.
+var dropdownSelectedButtonColor = "#32CD32";
+var buttonColor = "#d9d9d9";
+var lastindex = -1;
+var default_words = [
+  "want","ipad","help","love","colors","yes","no","bath",
+  "school","read","hug","brush teeth", "ball","music","potty","up",
+  "snack","sing","alphabet","walk","milk","mama","daddy","go",
+  "car","numbers","more","blanket","stop"
+];
 
+// Global variables
+var words;
 
+saveWordsToLocalStorage = function(words){
+  window.localStorage['words'] = words.toString();
+};
+
+sayString = function(words) {
+  // https://forum.ionicframework.com/t/problems-with-text-to-speech/31927
+  if (window.TTS != undefined) {
+    window.TTS
+      .speak({
+        text: words[index],
+        locale: 'en-US',
+        rate: 1.25
+      });
+  } else{
+    console.log("Unable to find Text to speech plugin");
+  }
+};
+
+/*
+Controller that controls editing of words
+ */
 app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
-  var buttonid = undefined;
-
+  // Check for words in local storage, otherwise use defaults.
   if(window.localStorage['words'] === undefined){
-    window.localStorage['words'] = default_words.toString();
+    saveWordsToLocalStorage(default_words);
   }
   words = window.localStorage['words'].split(",");
 
-  var ldiv = document.getElementById("l_button_container");
-  var mldiv = document.getElementById("ml_button_container");
-  var mrdiv = document.getElementById("mr_button_container");
-  var rdiv = document.getElementById("r_button_container");
+  /*
+  Buttons
+   */
 
+  // Containers for buttons, 4 columns
+  var c1 = document.getElementById("l_button_container");
+  var c2 = document.getElementById("ml_button_container");
+  var c3 = document.getElementById("mr_button_container");
+  var c4 = document.getElementById("r_button_container");
+  var buttonContainers = [c1, c2, c3, c4];
 
-
-  for(var i = 0; i < 8; i++){
+  for (var i = 0; i < 31; i++){
+    // Create a given button
     var button = document.createElement('button');
     button.setAttribute('class', 'key');
     button.setAttribute('id', 'button_' + i.toString());
     button.setAttribute('value', words[i]);
     button.setAttribute('ng-click', "showPopup($event)");
+    button.style.background = buttonColor;
 
+    // Recompile so ng-click update registers.
     $compile(button) ($scope);
 
-    ldiv.appendChild(button);
-
-    var button1 = document.createElement('button');
-    button1.setAttribute('class','key');
-    button1.setAttribute('id', 'button_' + (i + 8).toString());
-    button1.setAttribute('value', words[i + 8]);
-    button1.setAttribute('ng-click', "showPopup($event)");
-
-    $compile(button1) ($scope);
-
-    mldiv.appendChild(button1);
-
-    var button2 = document.createElement('button');
-    button2.setAttribute('class','key');
-    button2.setAttribute('id', 'button_' + (i + 16).toString());
-    button2.setAttribute('value', words[i + 16]);
-    button2.setAttribute('ng-click', "showPopup($event)");
-
-    $compile(button2) ($scope);
-
-    mrdiv.appendChild(button2);
-
-    if(i !== 7){
-      var button3 = document.createElement('button');
-      button3.setAttribute('class','key');
-      button3.setAttribute('id', 'button_' + (i + 24).toString());
-      button3.setAttribute('value', words[i + 24]);
-      button3.setAttribute('ng-click', "showPopup($event)");
-
-      $compile(button3) ($scope);
-
-      rdiv.appendChild(button3);
-
-    }
+    // Append to the correct div
+    buttonContainers[Math.floor(i/8)].appendChild(button);
   }
 
-
-  var dropdown = document.getElementById('dropdown_menu');
-  for(var i = 0; i < words.length; i++){
-    var option = document.createElement('option');
-    option.innerHTML = words[i];
-    dropdown.appendChild(option);
-  }
-
-  dropdown.addEventListener('change', function() {
-
-    if (dropdown.selectedIndex == -1)
-    return null;
-
-    var index = dropdown.selectedIndex - 1;
-    if(lastindex !== -1){
-      var lastbutton = document.getElementById("button_" + lastindex.toString());
-      lastbutton.style.background = "#d9d9d9";
-    }
-    var button = document.getElementById("button_" + index.toString());
-    button.style.background='#32CD32';
-    lastindex = index;
-
-    TTS
-    .speak({
-      text: words[index],
-      locale: 'en-US',
-      rate: 1.25
-    });
-  })
-
-
+  // Button action on click
   $scope.showPopup = function($event) {
+    // Keep scope
     $scope.data = {};
-    // An elaborate, custom popup
+
+    $scope.data.current_button_index = $event.currentTarget.id.replace("button_","");
+    $scope.data.current_button = $event.currentTarget;
+
     var myPopup = $ionicPopup.show({
-      template: '<input id="new_word">',
-      title: 'Change Word',
-      subTitle: 'The current word is ' + $event.currentTarget.value ,
+      template: '<input ng-model="data.new_word" type="text" placeholder="New Word">',
+      title: 'Change Button Words',
+      subTitle: 'Current word: ' + $event.currentTarget.value,
       scope: $scope,
       buttons: [
-        { text: 'Cancel' },
         {
-          text: '<b>Save</b>',
-          type: 'button-positive',
+          text: '<b>Finished</b>',
           onTap: function(e) {
-            if (!$scope.data.wifi) {
-
-              e.preventDefault();
-            } else {
-              return $scope.data.wifi;
-            }
+              return $scope;
           }
         }
       ]
     });
 
     myPopup.then(function(res) {
-      console.log('Tapped!', res);
+      // Check if there is an update
+      if (res.data.new_word) {
+        // Change word to new word and save to local storage for later use.
+        words[res.data.current_button_index] = res.data.new_word;
+        console.log($scope.data.current_button_index);
+
+        // Update button value
+        res.data.current_button.setAttribute('value', words[res.data.current_button_index]);
+        saveWordsToLocalStorage(words);
+      } else{
+        // Log a cancellation.
+        console.log("No word supplied.")
+      }
     });
   };
+
+
+
+
+
+  /*
+   Dropdown Menu
+   */
+
+// Make the dropdown menu have all the words.
+  var dropdown = document.getElementById('dropdown_menu');
+  for(var j = 0; j < words.length; j++){
+    // Assign an option for each with the value of a single word.
+    var option = document.createElement('option');
+    option.innerHTML = words[j];
+    dropdown.appendChild(option);
+  }
+
+// Say words when a user selects
+  dropdown.addEventListener('change', function() {
+    // No selection nothing happens
+    if (dropdown.selectedIndex <= -1) {
+      return;
+    }
+
+    // If selection, grab that word and say it
+    var index = dropdown.selectedIndex - 1;
+    if(lastindex > -1){
+      console.log("Last index");
+      var lastButton = document.getElementById("button_" + lastindex.toString());
+      lastButton.style.background = buttonColor;
+    }
+
+    var button = document.getElementById("button_" + index.toString());
+    button.style.background=dropdownSelectedButtonColor;
+    lastindex = index;
+
+    // Say something.
+    sayString(words[index])
+  });
 });
 
-highlightWord = function(){
-  //alert($scope.selectedItem);
-  var menu = document.getElementById('select_menu');
-  var selected = menu.selectedIndex;
-  var button = document.getElementById('button_' + selected.toString());
-  button.setAttribute('class','highlight_key');
-  alert('here');
-}
-
-var lastindex = -1;
-var words;
-var default_words = [
-  "want","ipad","help","love","colors","yes","no","bath","school","read","hug","brush teeth",
-  "ball","music","potty","up","snack","sing","alphabet","walk","milk","mama","daddy","go","car","numbers","more","blanket","stop"
-];
-
-
-document.addEventListener("deviceready", function(){
-
-
-});
 
 /*
-document.getElementById("playbutton").addEventListener('click', function () {
-  TTS
-  .speak({
-    text: words[Math.floor(Math.random() * 29)],
-    locale: 'en-US',
-    rate: 1.25
-  });
-}, false);*/
+Highlight designate words
+ */
+highlightWord = function(){
+  var menu = document.getElementById('select_menu');
+  var button = document.getElementById('button_' + menu.selectedIndex.toString());
+  button.setAttribute('class','highlight_key');
+};

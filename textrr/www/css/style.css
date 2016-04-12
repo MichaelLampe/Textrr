@@ -51,3 +51,23 @@
 	transform: rotate(90deg);
 	transform-origin: left top 0;
 }
+
+.popup-buttons > button {
+  background: #e3f2fd;
+}
+
+.popup-container .popup{
+  background :  #3f51b5;
+}
+
+.popup-body input {
+  padding-left: 5px;
+}
+
+.popup-head h3 {
+  color: white;
+}
+
+.popup-head h5 {
+  color: white;
+}
