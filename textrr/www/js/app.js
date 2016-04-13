@@ -16,6 +16,11 @@ var default_words = [
 // Global variables
 var words;
 
+
+
+/*
+              Helper Functions
+ */
 saveWordsToLocalStorage = function(words){
   window.localStorage['words'] = words.toString();
 };
@@ -34,8 +39,11 @@ sayString = function(words) {
   }
 };
 
+
+
+
 /*
-Controller that controls editing of words
+              Controller
  */
 app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
   // Check for words in local storage, otherwise use defaults.
@@ -76,6 +84,7 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
     // Keep scope
     $scope.data = {};
 
+    // Log these for later use when we reassign word in word array
     $scope.data.current_button_index = $event.currentTarget.id.replace("button_","");
     $scope.data.current_button = $event.currentTarget;
 
@@ -97,9 +106,15 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
     myPopup.then(function(res) {
       // Check if there is an update
       if (res.data.new_word) {
+        // Get dropdown option before we reassign
+        var dropdown_option = document.getElementById(words[res.data.current_button_index] + "_option");
+
         // Change word to new word and save to local storage for later use.
         words[res.data.current_button_index] = res.data.new_word;
-        console.log($scope.data.current_button_index);
+
+        // Update dropdown with new word
+        dropdown_option.innerHTML = words[res.data.current_button_index];
+        dropdown_option.setAttribute("id", words[res.data.current_button_index] + "_option");
 
         // Update button value
         res.data.current_button.setAttribute('value', words[res.data.current_button_index]);
@@ -124,6 +139,7 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
   for(var j = 0; j < words.length; j++){
     // Assign an option for each with the value of a single word.
     var option = document.createElement('option');
+    option.setAttribute("id", words[j] + "_option");
     option.innerHTML = words[j];
     dropdown.appendChild(option);
   }
@@ -138,7 +154,6 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
     // If selection, grab that word and say it
     var index = dropdown.selectedIndex - 1;
     if(lastindex > -1){
-      console.log("Last index");
       var lastButton = document.getElementById("button_" + lastindex.toString());
       lastButton.style.background = buttonColor;
     }
