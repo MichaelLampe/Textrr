@@ -5,17 +5,54 @@
 	max-width: 80%;
 }
 
+.bar {
+  padding-left: 0;
+}
+
+.list {
+  padding-left: 0;
+  width: 100%;
+}
+
+.item-select select {
+  max-width: 100%;
+}
+
+#settings {
+  position: fixed;
+  bottom: 3vh;
+  background: blue;
+  font-size: 1.5em;
+  width: 100%;
+  height: 10%;
+  color: white;
+}
+
+.item-input {
+  height: 100%;
+  width: 100%;
+}
+
 .button{
 	margin: 10px auto;
 	min-width: 60%;
 }
 
 .button_container{
-	height: 100vh;
-	margin-left: 3vw;
+	height: 80vh;
+	margin-left: 4vw;
 	margin-top: 10px;
-	width: 22vw;
+	width: 20vw;
 	float: left;
+}
+
+.button_container_last {
+  margin-right: 4vw;
+}
+
+#content {
+  margin-top: 7vh;
+  height: 80vh;
 }
 
 .list{
@@ -24,27 +61,21 @@
 		font-size: 24px;
 }
 
-
 .key{
-	height: 9vh;
-	width: 14vw;
+	height: 6vh;
+	width: 70%;
 	background-color: #d9d9d9;
 	border: 3px solid #696969;
 	margin: 6px auto;
-	margin-left: 1px;
+	margin-left: 15%;
+  margin-right: 15%;
 	text-align: center;
 	border-radius: 25px;
 }
 
 .dead_key{
-	height: 9vh;
-	width: 14vw;
-	background-color: #ff7f7f;
-	border: 3px solid #4c0000;
-	margin: 7px auto;
-	margin-left: 1px;
-	text-align: center;
-	border-radius: 25px;
+	background-color: #ff7f7f !important;
+	border: 3px solid #4c0000 !important;
 }
 
 .button_text {
