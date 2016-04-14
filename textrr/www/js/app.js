@@ -56,7 +56,6 @@ sayString = function(words) {
 
 
 
-
 /*
 Controller
 */
@@ -298,8 +297,10 @@ modifyWordLabels = function(column) {
 
 displayWordLabels = function() {
   document.getElementById("word_labels").classList.remove("hidden-word-labels");
+  document.getElementById("word_labels").classList.add("show-word-labels");
 };
 
 hideWordLabels = function() {
   document.getElementById("word_labels").classList.add("hidden-word-labels");
+  document.getElementById("word_labels").classList.remove("show-word-labels");
 };
