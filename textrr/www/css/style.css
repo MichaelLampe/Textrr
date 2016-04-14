@@ -33,10 +33,6 @@
   width: 100%;
 }
 
-.button{
-	margin: 10px auto;
-}
-
 .button_container{
 	height: 80vh;
 	margin-left: 4vw;
@@ -65,7 +61,8 @@
 	width: 70%;
 	background-color: #d9d9d9;
 	border: 3px solid #696969;
-	margin: 6px auto;
+	margin-top: 1vh;
+  margin-bottom: 1vh;
 	margin-left: 15%;
   margin-right: 15%;
 	text-align: center;
@@ -113,4 +110,25 @@
   width: 100%;
   height: 5vh;
   background: indigo;
+  margin-bottom: 3vh;
+}
+
+.hidden-word-labels {
+  display: none;
+}
+
+#word_labels {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 70vw;
+  height: 71vh;
+}
+
+.word-label {
+  font-size: 2em;
+  height: 6vh;
+  margin-top: 1.4vh;
+  margin-bottom: 2vh;
+  line-height: 6vh;
 }

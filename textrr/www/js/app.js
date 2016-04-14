@@ -10,7 +10,7 @@ var default_words = [
   "want","ipad","help","love","colors","yes","no","bath",
   "school","read","hug","brush teeth", "ball","music","potty","up",
   "snack","sing","alphabet","walk","milk","mama","daddy","go",
-  "car","numbers","more","blanket","stop"
+  "car","numbers","more","blanket","stop", "test1", "test2"
 ];
 
 // Containers for buttons, 4 columns
@@ -20,9 +20,17 @@ var c3 = document.getElementById("mr_button_container");
 var c4 = document.getElementById("r_button_container");
 var buttonContainers = [c1, c2, c3, c4];
 
+// Word labels
+var word_labels = [];
+for (i = 0; i < 8; i++){
+  word_label = document.getElementById("word_label_" + String(i));
+  word_labels.push(word_label)
+}
+
 // Global variables
 var words;
-
+var showingAllColumns = true;
+var current_k;
 
 
 /*
@@ -55,6 +63,7 @@ sayString = function(words) {
 app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
   // Check for words in local storage, otherwise use defaults.
   if(window.localStorage['words'] === undefined){
+    console.log("Loading default word list");
     saveWordsToLocalStorage(default_words);
   }
   words = window.localStorage['words'].split(",");
@@ -119,6 +128,9 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
         // Update button value
         res.data.current_button.setAttribute('value', words[res.data.current_button_index]);
         saveWordsToLocalStorage(words);
+        if (!showingAllColumns) {
+          modifyWordLabels(current_k);
+        }
       } else{
         // Log a cancellation.
         console.log("No word supplied.")
@@ -134,7 +146,7 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
    Dropdown Menu
    */
 
-// Make the dropdown menu have all the words.
+  // Make the dropdown menu have all the words.
   var dropdown = document.getElementById('dropdown_menu');
   for(var j = 0; j < words.length; j++){
     // Assign an option for each with the value of a single word.
@@ -144,7 +156,7 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
     dropdown.appendChild(option);
   }
 
-// Say words when a user selects
+  // Say words when a user selects
   dropdown.addEventListener('change', function() {
     // No selection nothing happens
     if (dropdown.selectedIndex <= -1) {
@@ -181,18 +193,64 @@ highlightWord = function(){
 /*
 Display word drawers
  */
-showing = true;
 displayWordsColumn = function(keep) {
     k = parseInt(keep);
+
+    if (showingAllColumns){
+      displayWordLabels();
+      current_k = k;
+    } else {
+      hideWordLabels();
+    }
+
+    // Switch word labels to correct values
+    modifyWordLabels(k);
     for (i = 0; i < 4; i++) {
+
+      // Add or remove all but the column that signaled.
       if (i !== k) {
-        if (showing) {
-           buttonContainers[i].classList.add("hidden-button-container");
+        if (showingAllColumns) {
+            buttonContainers[i].classList.add("hidden-button-container");
         } else
           {
             buttonContainers[i].classList.remove("hidden-button-container");
           }
         }
       }
-  showing = !showing;
+
+  // Invert showing
+  showingAllColumns = !showingAllColumns;
 };
+
+
+
+/*
+Word labels
+ */
+modifyWordLabels = function(column) {
+  start = 8*column;
+  var fudge = 0;
+  if (column === 3){
+    fudge = 1;
+    word_labels[0].innerHTML = "";
+  }
+
+  for (i = start + fudge; i < start+8; i++){
+    message = words[i-fudge];
+    if (words[i-fudge] == undefined) {
+      message = "";
+    }
+
+    word_labels[i - start].innerHTML = message;
+  }
+};
+
+displayWordLabels = function() {
+  document.getElementById("word_labels").classList.remove("hidden-word-labels");
+};
+
+hideWordLabels = function() {
+  document.getElementById("word_labels").classList.add("hidden-word-labels");
+};
+
+
