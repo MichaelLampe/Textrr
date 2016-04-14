@@ -1,6 +1,8 @@
 // Declare application
 var app = angular.module('textrr', ['ionic']);
 
+var voiceActive = true;
+
 // Basic constants
 // TODO: Define these colors and properties in css classes that we add and remove.
 var dropdownSelectedButtonColor = "#32CD32";
@@ -42,15 +44,17 @@ saveWordsToLocalStorage = function(words){
 
 sayString = function(words) {
   // https://forum.ionicframework.com/t/problems-with-text-to-speech/31927
-  if (window.TTS != undefined) {
-    window.TTS
-      .speak({
-        text: words[index],
-        locale: 'en-US',
-        rate: 1.25
-      });
-  } else{
-    console.log("Unable to find Text to speech plugin");
+  if (voiceActive) {
+    if (window.TTS != undefined) {
+      window.TTS
+        .speak({
+          text: words[index],
+          locale: 'en-US',
+          rate: 1.25
+        });
+    } else {
+      console.log("Unable to find Text to speech plugin");
+    }
   }
 };
 
@@ -254,4 +258,13 @@ hideWordLabels = function() {
   document.getElementById("word_labels").classList.remove("show-word-labels");
 };
 
+toggleVoiceActive = function(){
+  voiceActive = !voiceActive;
+  voice_active = document.getElementById("voice-active");
 
+  if (voiceActive){
+    voice_active.style.background = "green";
+  } else {
+    voice_active.style.background = "red";
+  }
+};
