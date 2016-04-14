@@ -13,6 +13,13 @@ var default_words = [
   "car","numbers","more","blanket","stop"
 ];
 
+// Containers for buttons, 4 columns
+var c1 = document.getElementById("l_button_container");
+var c2 = document.getElementById("ml_button_container");
+var c3 = document.getElementById("mr_button_container");
+var c4 = document.getElementById("r_button_container");
+var buttonContainers = [c1, c2, c3, c4];
+
 // Global variables
 var words;
 
@@ -55,13 +62,6 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
   /*
   Buttons
    */
-
-  // Containers for buttons, 4 columns
-  var c1 = document.getElementById("l_button_container");
-  var c2 = document.getElementById("ml_button_container");
-  var c3 = document.getElementById("mr_button_container");
-  var c4 = document.getElementById("r_button_container");
-  var buttonContainers = [c1, c2, c3, c4];
 
   for (var i = 0; i < 31; i++){
     // Create a given button
@@ -175,4 +175,24 @@ highlightWord = function(){
   var menu = document.getElementById('select_menu');
   var button = document.getElementById('button_' + menu.selectedIndex.toString());
   button.setAttribute('class','highlight_key');
+};
+
+
+/*
+Display word drawers
+ */
+showing = true;
+displayWordsColumn = function(keep) {
+    k = parseInt(keep);
+    for (i = 0; i < 4; i++) {
+      if (i !== k) {
+        if (showing) {
+           buttonContainers[i].classList.add("hidden-button-container");
+        } else
+          {
+            buttonContainers[i].classList.remove("hidden-button-container");
+          }
+        }
+      }
+  showing = !showing;
 };
