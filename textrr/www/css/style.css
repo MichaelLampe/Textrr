@@ -18,16 +18,6 @@
   max-width: 100%;
 }
 
-#settings {
-  position: fixed;
-  bottom: 3vh;
-  background: blue;
-  font-size: 1.5em;
-  width: 100%;
-  height: 10%;
-  color: white;
-}
-
 .item-input {
   height: 100%;
   width: 100%;
@@ -46,7 +36,7 @@
 }
 
 #content {
-  margin-top: 7vh;
+  margin-top: 10vh;
   height: 80vh;
 }
 
@@ -103,7 +93,9 @@
   width: 0 !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
-  display: none;
+  opacity: 0;
+  transition: width 1s, opacity 0.5s;
+
 }
 
 .column-select-button {
@@ -114,7 +106,12 @@
 }
 
 .hidden-word-labels {
-  display: none;
+  opacity: 0;
+}
+
+.show-word-labels {
+  opacity: 1;
+  transition: opacity 0.15s;
 }
 
 #word_labels {
@@ -131,4 +128,24 @@
   margin-top: 1.4vh;
   margin-bottom: 2vh;
   line-height: 6vh;
+}
+
+.button-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  background: purple;
+  height: 15%;
+}
+
+.button-bar-buttons {
+  border-right: 2px;
+  border-color: pink;
+  padding: 0;
+  height: 100%;
+  width: 33.333%;
+  background: red;
+  color: white;
+  line-height: 100%;
+  text-align: center;
 }
