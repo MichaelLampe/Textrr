@@ -1,2 +1,2 @@
 ionic build ios
-ionic emulate ios
+ionic emulate ios -cl

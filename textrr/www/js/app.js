@@ -19,8 +19,8 @@ var words;
 
 
 /*
-              Helper Functions
- */
+Helper Functions
+*/
 saveWordsToLocalStorage = function(words){
   window.localStorage['words'] = words.toString();
 };
@@ -29,11 +29,11 @@ sayString = function(words) {
   // https://forum.ionicframework.com/t/problems-with-text-to-speech/31927
   if (window.TTS != undefined) {
     window.TTS
-      .speak({
-        text: words[index],
-        locale: 'en-US',
-        rate: 1.25
-      });
+    .speak({
+      text: words[index],
+      locale: 'en-US',
+      rate: 1.25
+    });
   } else{
     console.log("Unable to find Text to speech plugin");
   }
@@ -43,9 +43,13 @@ sayString = function(words) {
 
 
 /*
-              Controller
- */
+Controller
+*/
 app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
+
+//bluetoothSerial.enable();
+//refreshDeviceList();
+
   // Check for words in local storage, otherwise use defaults.
   if(window.localStorage['words'] === undefined){
     saveWordsToLocalStorage(default_words);
@@ -54,7 +58,7 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
 
   /*
   Buttons
-   */
+  */
 
   // Containers for buttons, 4 columns
   var c1 = document.getElementById("l_button_container");
@@ -97,7 +101,7 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
         {
           text: '<b>Finished</b>',
           onTap: function(e) {
-              return $scope;
+            return $scope;
           }
         }
       ]
@@ -131,10 +135,10 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
 
 
   /*
-   Dropdown Menu
-   */
+  Dropdown Menu
+  */
 
-// Make the dropdown menu have all the words.
+  // Make the dropdown menu have all the words.
   var dropdown = document.getElementById('dropdown_menu');
   for(var j = 0; j < words.length; j++){
     // Assign an option for each with the value of a single word.
@@ -144,7 +148,7 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
     dropdown.appendChild(option);
   }
 
-// Say words when a user selects
+  // Say words when a user selects
   dropdown.addEventListener('change', function() {
     // No selection nothing happens
     if (dropdown.selectedIndex <= -1) {
@@ -170,9 +174,58 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
 
 /*
 Highlight designate words
- */
+*/
 highlightWord = function(){
   var menu = document.getElementById('select_menu');
   var button = document.getElementById('button_' + menu.selectedIndex.toString());
   button.setAttribute('class','highlight_key');
 };
+
+/*
+refreshDeviceList = function() {
+  bluetoothSerial.discoverUnpaired(
+    function(){
+      console.log("discovered devices!")
+    }, function(){
+      console.log("error discovering unpaired devices")
+    });
+  };
+
+  onDeviceList = function(devices) {
+    var option;
+
+    // remove existing devices
+    deviceList.innerHTML = "";
+    app.setStatus("");
+
+    devices.forEach(function(device) {
+
+    });
+
+    if (devices.length === 0) {
+      console.log("No devices were found.")
+    } else {
+      console.log("Found " + devices.length + " device" + (devices.length === 1 ? "." : "s."));
+    }
+
+  };
+  connect = function(e) {
+    var onConnect = function() {
+      // subscribe for incoming data
+      bluetoothSerial.subscribe('\n', app.onData, app.onError);
+    };
+
+    var deviceId = e.target.dataset.deviceId;
+    if (!deviceId) { // try the parent
+      deviceId = e.target.parentNode.dataset.deviceId;
+    }
+    bluetoothSerial.connect(deviceId, onConnect, app.onError);
+  };
+  disconnect = function(event) {
+    bluetoothSerial.disconnect(function(){
+      console.log("disconnected")
+    }, function(){
+      console.log("error disconnecting")
+    });
+  };
+*/
