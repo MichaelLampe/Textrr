@@ -12,7 +12,7 @@ var default_words = [
   "want","ipad","help","love","colors","yes","no","bath",
   "school","read","hug","brush teeth", "ball","music","potty","up",
   "snack","sing","alphabet","walk","milk","mama","daddy","go",
-  "car","numbers","more","blanket","stop", "test1", "test2"
+  "car","numbers","more","blanket","stop", "", ""
 ];
 
 // Containers for buttons, 4 columns
@@ -140,8 +140,6 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
       }
     });
   };
-
-
 
 
 

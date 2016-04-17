@@ -38,6 +38,7 @@
 #content {
   margin-top: 10vh;
   height: 80vh;
+  background: #161616;
 }
 
 .list{
@@ -49,14 +50,14 @@
 .key{
 	height: 6vh;
 	width: 70%;
-	background-color: #d9d9d9;
-	border: 3px solid #696969;
+	background-color: #FFF;
+	border: 3px solid #FFF;
 	margin-top: 1vh;
   margin-bottom: 1vh;
 	margin-left: 15%;
   margin-right: 15%;
 	text-align: center;
-	border-radius: 25px;
+	border-radius: 10px;
 }
 
 .dead_key{
@@ -74,7 +75,7 @@
 }
 
 .popup-container .popup{
-  background :  #3f51b5;
+  background :  #11346e;
 }
 
 .popup-body input {
@@ -100,9 +101,11 @@
 
 .column-select-button {
   width: 100%;
-  height: 5vh;
-  background: indigo;
+  height: 10vh;
+  background: #11346e;
+  border-color: #11346e;
   margin-bottom: 3vh;
+  color: white;
 }
 
 .hidden-word-labels {
@@ -119,7 +122,8 @@
   right: 0;
   bottom: 0;
   width: 70vw;
-  height: 71vh;
+  height: 66vh;
+  color: #FFF;
 }
 
 .word-label {
@@ -135,17 +139,19 @@
   bottom: 0;
   width: 100vw;
   background: purple;
-  height: 15%;
+  height: 10%;
+  z-index: 1000;
 }
 
 .button-bar-buttons {
-  border-right: 2px;
-  border-color: pink;
   padding: 0;
   height: 100%;
-  width: 33.333%;
+  width: 100%;
   background: red;
   color: white;
   line-height: 100%;
   text-align: center;
+  border-left-width: 0;
+  border-top-width: 2px;
+  border-top-color: white;
 }
