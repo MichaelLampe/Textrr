@@ -44,6 +44,17 @@ saveWordsToLocalStorage = function(words){
 
 sayString = function(words) {
   // https://forum.ionicframework.com/t/problems-with-text-to-speech/31927
+<<<<<<< HEAD
+  if (window.TTS != undefined) {
+    window.TTS
+    .speak({
+      text: words[index],
+      locale: 'en-US',
+      rate: 1.25
+    });
+  } else{
+    console.log("Unable to find Text to speech plugin");
+=======
   if (voiceActive) {
     if (window.TTS != undefined) {
       window.TTS
@@ -55,6 +66,7 @@ sayString = function(words) {
     } else {
       console.log("Unable to find Text to speech plugin");
     }
+>>>>>>> 8172165323ce48e5a7f762abbeda23d44687ae1f
   }
 };
 
@@ -306,13 +318,17 @@ hideWordLabels = function() {
   document.getElementById("word_labels").classList.add("hidden-word-labels");
   document.getElementById("word_labels").classList.remove("show-word-labels");
 };
+<<<<<<< HEAD
+=======
 
 toggleVoiceActive = function(){
   voiceActive = !voiceActive;
   voice_active = document.getElementById("voice-active");
+
   if (voiceActive){
     voice_active.style.background = "green";
   } else {
     voice_active.style.background = "red";
   }
 };
+>>>>>>> 8172165323ce48e5a7f762abbeda23d44687ae1f
