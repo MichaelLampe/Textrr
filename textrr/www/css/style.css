@@ -124,6 +124,7 @@
   width: 70vw;
   height: 66vh;
   color: #FFF;
+	z-index: -1;
 }
 
 .word-label {
@@ -132,6 +133,7 @@
   margin-top: 1.4vh;
   margin-bottom: 2vh;
   line-height: 6vh;
+	z-index: -1;
 }
 
 .button-bar {
