@@ -96,7 +96,10 @@
   margin-right: 0 !important;
   opacity: 0;
   transition: width 1s, opacity 0.5s;
+}
 
+.hidden-button-container-final {
+  display:none;
 }
 
 .column-select-button {
@@ -156,4 +159,8 @@
   border-left-width: 0;
   border-top-width: 2px;
   border-top-color: white;
+}
+
+.button-hide{
+  display: none;
 }

@@ -214,11 +214,37 @@ displayWordsColumn = function(keep) {
 
       // Add or remove all but the column that signaled.
       if (i !== k) {
+        container = buttonContainers[i];
         if (showingAllColumns) {
-            buttonContainers[i].classList.add("hidden-button-container");
+            container.classList.add("hidden-button-container");
+
+
+            /*
+            We have to do this because of JS scoping.
+             */
+            setTimeoutContainer = function(c){
+              setTimeout(function(){
+                c.classList.add("hidden-button-container-final");
+              },600);
+            };
+
+            setTimeoutContainer(container);
+
         } else
           {
+            /*
+            Fuzz it a bit to make it look better.
+             */
+            setTimeoutContainer = function(c){
+              setTimeout(function(){
+                c.classList.remove("hidden-button-container-final");
+              },150);
+            };
+
             buttonContainers[i].classList.remove("hidden-button-container");
+
+            setTimeoutContainer(container);
+
           }
         }
       }
