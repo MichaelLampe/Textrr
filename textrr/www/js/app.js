@@ -2,6 +2,7 @@
 var app = angular.module('textrr', ['ionic']);
 
 var voiceActive = true;
+var bluetoothActive = true;
 
 // Basic constants
 // TODO: Define these colors and properties in css classes that we add and remove.
@@ -42,16 +43,16 @@ saveWordsToLocalStorage = function(words){
   window.localStorage['words'] = words.toString();
 };
 
-sayString = function(words) {
+sayString = function(word) {
   // https://forum.ionicframework.com/t/problems-with-text-to-speech/31927
   if (voiceActive) {
     if (window.TTS != undefined) {
       window.TTS
-        .speak({
-          text: words[index],
-          locale: 'en-US',
-          rate: 1.25
-        });
+      .speak({
+        text: word,
+        locale: 'en-US',
+        rate: 1.25
+      });
     } else {
       console.log("Unable to find Text to speech plugin");
     }
@@ -64,9 +65,6 @@ sayString = function(words) {
 Controller
 */
 app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
-
-//bluetoothSerial.enable();
-//refreshDeviceList();
 
   // Check for words in local storage, otherwise use defaults.
   if(window.localStorage['words'] === undefined){
@@ -179,6 +177,7 @@ app.controller('edit_words',function($scope, $ionicPopup, $timeout, $compile) {
     button.style.background=dropdownSelectedButtonColor;
     lastindex = index;
 
+
     // Say something.
     sayString(words[index])
   });
@@ -197,88 +196,39 @@ highlightWord = function(){
 
 /*
 Display word drawers
- */
+*/
 displayWordsColumn = function(keep) {
-    k = parseInt(keep);
+  k = parseInt(keep);
 
-    if (showingAllColumns){
-      displayWordLabels();
-      current_k = k;
-    } else {
-      hideWordLabels();
-    }
+  if (showingAllColumns){
+    displayWordLabels();
+    current_k = k;
+  } else {
+    hideWordLabels();
+  }
 
-    // Switch word labels to correct values
-    modifyWordLabels(k);
-    for (i = 0; i < 4; i++) {
+  // Switch word labels to correct values
+  modifyWordLabels(k);
+  for (i = 0; i < 4; i++) {
 
-      // Add or remove all but the column that signaled.
-      if (i !== k) {
-        if (showingAllColumns) {
-            buttonContainers[i].classList.add("hidden-button-container");
-        } else
-          {
-            buttonContainers[i].classList.remove("hidden-button-container");
-          }
-        }
+    // Add or remove all but the column that signaled.
+    if (i !== k) {
+      if (showingAllColumns) {
+        buttonContainers[i].classList.add("hidden-button-container");
+      } else
+      {
+        buttonContainers[i].classList.remove("hidden-button-container");
       }
+    }
+  }
 
   // Invert showing
   showingAllColumns = !showingAllColumns;
 };
 
 /*
-refreshDeviceList = function() {
-  bluetoothSerial.discoverUnpaired(
-    function(){
-      console.log("discovered devices!")
-    }, function(){
-      console.log("error discovering unpaired devices")
-    });
-  };
-
-  onDeviceList = function(devices) {
-    var option;
-
-    // remove existing devices
-    deviceList.innerHTML = "";
-    app.setStatus("");
-
-    devices.forEach(function(device) {
-
-    });
-
-    if (devices.length === 0) {
-      console.log("No devices were found.")
-    } else {
-      console.log("Found " + devices.length + " device" + (devices.length === 1 ? "." : "s."));
-    }
-
-  };
-  connect = function(e) {
-    var onConnect = function() {
-      // subscribe for incoming data
-      bluetoothSerial.subscribe('\n', app.onData, app.onError);
-    };
-
-    var deviceId = e.target.dataset.deviceId;
-    if (!deviceId) { // try the parent
-      deviceId = e.target.parentNode.dataset.deviceId;
-    }
-    bluetoothSerial.connect(deviceId, onConnect, app.onError);
-  };
-  disconnect = function(event) {
-    bluetoothSerial.disconnect(function(){
-      console.log("disconnected")
-    }, function(){
-      console.log("error disconnecting")
-    });
-  };
-*/
-
-/*
 Word labels
- */
+*/
 modifyWordLabels = function(column) {
   start = 8*column;
   var fudge = 0;
@@ -316,3 +266,37 @@ toggleVoiceActive = function(){
     voice_active.style.background = "red";
   }
 };
+
+
+app.run(function ($ionicPlatform) {
+  $ionicPlatform.ready(function(){
+
+    var devices = [];
+
+    ble.isEnabled(
+      function() {
+        alert("Bluetooth is enabled!");
+      },
+      function() {
+        alert("Bluetooth is not enabled! Please turn bluetooth on to begin communicating.");
+      });
+
+
+      ble.scan(["00001539-1212-efde-1523-785feabcd123"], function(device) {
+        alert("Found a device")
+        devices.push(device)
+      }, function(){
+        alert("Failed to scan")
+      });
+
+      setTimeout(ble.stopScan,
+        10000,
+        function() {
+          alert("Scan complete");
+          alert("Found " + devices.length + " devices");
+        },
+        function() { alert("stopScan failed"); }
+      );
+
+    });
+  })
