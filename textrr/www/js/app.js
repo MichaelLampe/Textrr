@@ -270,33 +270,56 @@ toggleVoiceActive = function(){
 
 app.run(function ($ionicPlatform) {
   $ionicPlatform.ready(function(){
+    // constants
+    var address = "C6:AB:41:E8:20:46";
 
-    var devices = [];
+    /*
+    Readable function location
+    */
+    var connectSuccess = function(result) {
+      console.log(result);
+      console.log("Connected")
+    }
+    var connectFailure = function(result) {
+      console.log(result.message)
+      console.log("Failed to connect")
+    }
+    var closeSuccess = function(result) {
+      console.log(result);
+      console.log("Closed.")
+    }
+    var closeFailure = function() {
+      console.log("Failed to close.")
+    }
+    var startScanSuccess = function(result) {
+      console.log(result.status);
 
-    ble.isEnabled(
-      function() {
-        alert("Bluetooth is enabled!");
-      },
-      function() {
-        alert("Bluetooth is not enabled! Please turn bluetooth on to begin communicating.");
-      });
+    }
+    var startScanError = function() {
+      console.log("isDiscoveredError.")
+    }
 
+    var initializeSuccess = function(){
+      console.log("Initalized")
+      var params = {"address": "C6:AB:41:E8:20:46"}
+      bluetoothle.startScan(startScanSuccess, startScanError, params);
+    }
 
-      ble.scan(["00001539-1212-efde-1523-785feabcd123"], function(device) {
-        alert("Found a device")
-        devices.push(device)
-      }, function(){
-        alert("Failed to scan")
-      });
+    var initializeFailure = function(){
+      console.log("Everything is broken.")
+    }
 
-      setTimeout(ble.stopScan,
-        10000,
-        function() {
-          alert("Scan complete");
-          alert("Found " + devices.length + " devices");
-        },
-        function() { alert("stopScan failed"); }
-      );
+    var initializeBluetooth = function() {
+      var params = {
+        "request": true,
+        "statusReceiver": false,
+        "restoreKey" : "bluetoothleplugin"
+      }
+      bluetoothle.initialize(initializeSuccess, initializeFailure, params);
+    }
 
-    });
+    console.log("Starting up")
+    initializeBluetooth();
+
   })
+});
